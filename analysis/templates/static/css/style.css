@@ -1,0 +1,181 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+.graph-container {
+    margin-top: 20px;
+}
+.form-section {
+    margin-bottom: 20px;
+}
+h1, h2 {
+    color: #4CAF50;
+}
+
+/* CSV Data Preview Table Styles */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto; /* Adds horizontal scrolling if the table is too wide */
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+}
+
+.table th, .table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.table-bordered {
+    border: 1px solid #ddd;
+}
+
+.table td {
+    color: #555;
+    font-size: 14px;
+}
+.missing-values-container {
+display: flex;
+flex-wrap: wrap;
+gap: 20px;
+justify-content: space-around;
+}
+
+.missing-value-card {
+background-color: #f2f2f2;
+border: 1px solid #ddd;
+border-radius: 8px;
+padding: 15px;
+width: 200px;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+text-align: center;
+transition: transform 0.3s ease;
+}
+
+.missing-value-card:hover {
+transform: translateY(-5px);
+box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.missing-value-card h4 {
+color: #4CAF50;
+font-size: 18px;
+}
+
+.missing-value-card p {
+font-size: 16px;
+color: #555;
+}
+
+.graph-container {
+margin-top: 30px;
+padding: 20px;
+background-color: #f9f9f9;
+border-radius: 8px;
+box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.update-button-container {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.update-button-container button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.update-button-container button:hover {
+    background-color: #45a049;
+}
+
+h2 {
+    color: #4CAF50;
+    font-size: 24px;
+}
+
+.graph-container h2 {
+    margin-bottom: 20px;
+}
+
+.form-section {
+margin-top: 20px;
+}
+
+.form-group {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+    color: #4CAF50;
+    margin-bottom: 15px;
+}
+
+label {
+    font-size: 16px;
+    font-weight: 600;
+    margin-right: 10px;
+    display: inline-block;
+}
+
+select {
+    width: 250px;
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.update-btn {
+    padding: 10px 25px;
+    font-size: 14px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+}
+
+.update-btn:hover {
+    background-color: #45a049;
+}
+
+button:focus {
+    outline: none;
+}
+
+.form-group button {
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}

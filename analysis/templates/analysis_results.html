@@ -1,0 +1,436 @@
+{%load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV Analysis Results</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .graph-container {
+            margin-top: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #007bff;
+        }
+
+        /* Title Section */
+        .title-section {
+            background-color: #007bff;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        /* Title Styling */
+        .header-title {
+            font-size: 2.5em;
+            color: #fff;
+            font-weight: bold;
+            display: inline-block;
+            padding: 15px 20px;
+            border-radius: 8px;
+            width: auto;
+            margin: 0;
+        }
+
+        .header-title i {
+            margin-right: 10px; /* Space between icon and text */
+        }
+
+        /* Hover Effect for Title */
+        .header-title:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto; 
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+        }
+
+        .table th, .table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .table-striped tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+
+        .table-bordered {
+            border: 1px solid #ddd;
+        }
+
+        .table td {
+            color: #555;
+            font-size: 14px;
+        }
+        .missing-values-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-around;
+        }
+
+        .missing-value-card {
+        background-color: #f2f2f2;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        width: 200px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease;
+        }
+
+        .missing-value-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .missing-value-card h4 {
+        color: #007bff;
+        font-size: 18px;
+        }
+
+        .missing-value-card p {
+        font-size: 16px;
+        color: #555;
+        }
+
+        .graph-container {
+        margin-top: 30px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .update-button-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .update-button-container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-button-container button:hover {
+            background-color: #007bff;
+        }
+
+        h2 {
+            color: #007bff;
+            font-size: 24px;
+        }
+
+        .graph-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+        margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h3 {
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: 600;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        select {
+            width: 250px;
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .update-btn {
+            padding: 10px 25px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+            display: inline-block;
+        }
+
+        .update-btn:hover {
+            background-color: #007bff;
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        .form-group button {
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="title-section">
+        <h1 class="header-title"><i class="fa fa-chart-line"></i> CSV Analysis Results</h1>
+    </div>
+
+    <div>
+        <h2>CSV Data Preview</h2>
+        {{ csv_data|safe }}
+    </div>
+    
+    <div>
+        <h2>Summary Statistics</h2>
+        {{ summary_stats|safe }}
+    </div>
+
+    <div>
+        <h2>Missing Values</h2>
+        <div class="missing-values-container">
+            {% for column, count in missing_values.items %}
+                <div class="missing-value-card">
+                    <h4>{{ column }}</h4>
+                    <p>Missing Values: <strong>{{ count }}</strong></p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    <div class="form-section">
+        <form method="post" id="graph-form">
+            {% csrf_token %}
+    
+            <!-- Scatter Plot Settings -->
+            <div class="form-group">
+                <h3>Scatter Plot Settings</h3>
+                <label for="scatter_x">Select X-axis for Scatter Plot:</label>
+                <select name="scatter_x" id="scatter_x">
+                    {% for col in numerical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <label for="scatter_y">Select Y-axis for Scatter Plot:</label>
+                <select name="scatter_y" id="scatter_y">
+                    {% for col in numerical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="scatter-btn" name="update_graph" value="scatter" class="update-btn">Update Scatter Plot</button>
+            </div>
+
+            <div class="graph-container" id="scatter_plot_container">
+                {{ scatter_html|safe }}
+            </div>
+    
+            <!-- Histogram Settings -->
+            <div class="form-group">
+                <h3>Histogram Settings</h3>
+                <label for="histogram_x">Select Column for Histogram:</label>
+                <select name="histogram_x" id="histogram_x">
+                    {% for col in numerical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="histogram-btn" name="update_graph" value="histogram" class="update-btn">Update Histogram</button>
+            </div>
+
+            <div class="graph-container" id="histogram_plot_container">
+                {{ histogram_html|safe }}
+            </div>
+    
+            <!-- Box Plot Settings -->
+            <div class="form-group">
+                <h3>Box Plot Settings</h3>
+                <label for="box_y">Select Column for Box Plot:</label>
+                <select name="box_y" id="box_y">
+                    {% for col in numerical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="box-btn" name="update_graph" value="box" class="update-btn">Update Box Plot</button>
+            </div>
+
+            <div class="graph-container" id="box_plot_container">
+                {{ box_html|safe }}
+            </div>
+    
+            <!-- Heatmap Settings -->
+            <div class="form-group">
+                <h3>Heatmap Settings</h3>
+                <label for="heatmap_x">Select X-axis for Heatmap:</label>
+                <select name="heatmap_x" id="heatmap_x">
+                    {% for col in numerical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <label for="heatmap_y">Select Y-axis for Heatmap:</label>
+                <select name="heatmap_y" id="heatmap_y">
+                    {% for col in numerical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="heatmap-btn" name="update_graph" value="heatmap" class="update-btn">Update Heatmap</button>
+            </div>
+
+            <div class="graph-container" id="heatmap_plot_container">
+                {{ heatmap_html|safe }}
+            </div>
+    
+            <!-- Pie Chart Settings -->
+            <div class="form-group">
+                <h3>Pie Chart Settings</h3>
+                <label for="pie_column">Select Column for Pie Chart:</label>
+                <select name="pie_column" id="pie_column">
+                    {% for col in categorical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="pie-btn" name="update_graph" value="pie" class="update-btn">Update Pie Chart</button>
+            </div>
+            <div class="graph-container" id="pie_plot_container">
+                {{ pie_html|safe }}
+            </div>
+
+            <!-- Bar Graph Settings -->
+            <div class="form-group">
+                <h3>Bar Graph Settings</h3>
+                <label for="bar_column">Select Column for Bar Graph:</label>
+                <select name="bar_column" id="bar_column">
+                    {% for col in categorical_columns %}
+                        <option value="{{ col }}">{{ col }}</option>
+                    {% endfor %}
+                </select>
+                <button type="button" id="bar-btn" name="update_graph" value="bar" class="update-btn">Update Bar Graph</button>
+            </div>
+
+            <div class="graph-container" id="bar_plot_container">
+                {{ bar_html|safe }}
+            </div>
+
+        </form>
+    </div>
+    
+    <script>
+        $(document).ready(function () {
+        // Handle the click event for the update buttons
+        $(document).on("click", ".update-btn", function (e) {
+            e.preventDefault();
+
+            // Identify the graph type from the clicked button's value
+            const graphType = $(this).val();
+
+            // Create FormData object and append necessary fields
+            const formData = new FormData($("#graph-form")[0]);
+            formData.append("graph_type", graphType);
+
+            // Dynamically append graph-specific fields based on graphType
+            switch (graphType) {
+                case "scatter":
+                    formData.append("scatter_x", $("#scatter_x").val());
+                    formData.append("scatter_y", $("#scatter_y").val());
+                    break;
+                case "histogram":
+                    formData.append("histogram_x", $("#histogram_x").val());
+                    break;
+                case "box":
+                    formData.append("box_y", $("#box_y").val());
+                    break;
+                case "heatmap":
+                    formData.append("heatmap_x", $("#heatmap_x").val());
+                    formData.append("heatmap_y", $("#heatmap_y").val());
+                    break;
+                case "pie":
+                    formData.append("pie_column", $("#pie_column").val());
+                    break;
+                case "bar":
+                    formData.append("bar_column", $("#bar_column").val());
+                    break;
+            }
+
+
+            // Perform the AJAX request
+            $.ajaxSetup({
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                url: "/update_graph/", 
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response.error_message) {
+                        alert(response.error_message);
+                    } else {
+                        // Update the specific graph container with new HTML
+                        $("#" + graphType + "_plot_container").html(response[graphType + "_html"]);
+                    }
+                },
+                error: function () {
+                    alert("Error updating the graph.");
+                }
+            });
+        });
+    });
+
+    </script>    
+</body>
+</html>
